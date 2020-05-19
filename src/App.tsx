@@ -22,8 +22,8 @@ class App extends Component<AppProps, AppState> {
     this.i = 0;
     this.timer = 0;
     this.state = {
-      tickMod: 200,
-      len: 9
+      tickMod: 30,
+      len: 4
     };
   }
 
@@ -50,7 +50,7 @@ class App extends Component<AppProps, AppState> {
       </div>*/}
 
       <div>
-        {this.state.tickMod} Speed
+        {this.state.tickMod} Delay
         <button onClick={() => this.setState({tickMod: this.state.tickMod - 10})}>
           -10
         </button>
@@ -69,7 +69,7 @@ class App extends Component<AppProps, AppState> {
         </button>
       </div>
 
-      <h1>Character 1</h1>
+      <h1>Frame images</h1>
 
       <div style={{
         display: "flex",
@@ -88,7 +88,7 @@ class App extends Component<AppProps, AppState> {
     );
   }
 
-  private tick() {
+  tick() {
     this.timer = this.timer + 1;
     //console.log(this.timer + "/" + this.state.tickMod + "/" + this.i + ":" + this.state.currentImage);
     if (this.timer % this.state.tickMod === 0) {
