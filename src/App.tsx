@@ -8,48 +8,65 @@ interface AppProps {
 
 interface AppState {
   currentImage?: string
-  i1?: string
-  i2?: string
-  i3?: string
-  i4?: string
-  i5?: string
-  i6?: string
-  i7?: string
-  i8?: string
-  i9?: string
+
+  tickMod: number
+  len: number
 }
 
 class App extends Component<AppProps, AppState> {
+  i: number;
+  timer: number;
+
   constructor(props: AppProps) {
     super(props);
-    this.state = {};
+    this.i = 0;
+    this.timer = 0;
+    this.state = {
+      tickMod: 200,
+      len: 9
+    };
   }
 
   componentDidMount(): void {
-    let len = 9;
-    let i = 0;
+
     setInterval(() => {
-      let state: any = this.state;
-      this.setState({
-        currentImage: state["i" + (i + 1)]
-      });
-      i = (i + 1) % len;
-    }, 250);
+      this.tick();
+    }, 1);
   }
 
   render() {
 
     return (<div>
 
-      <h1>Drop files to show </h1>
+      <h1>Tile/Sprite/Animation Editor</h1>
 
-      <div style={{
+      {/*<div style={{
         display: "flex",
         justifyContent: "space-around"
       }}>
         <DroppableImage/>
         <DroppableImage/>
         <DroppableImage/>
+      </div>*/}
+
+      <div>
+        {this.state.tickMod} Speed
+        <button onClick={() => this.setState({tickMod: this.state.tickMod - 10})}>
+          -10
+        </button>
+        <button onClick={() => this.setState({tickMod: this.state.tickMod + 10})}>
+          +10
+        </button>
+      </div>
+
+      <div>
+        {this.state.len} Frames
+        <button onClick={() => this.setState({len: this.state.len - 1})}>
+          -1
+        </button>
+        <button onClick={() => this.setState({len: this.state.len + 1})}>
+          +1
+        </button>
       </div>
 
       <h1>Character 1</h1>
@@ -58,20 +75,33 @@ class App extends Component<AppProps, AppState> {
         display: "flex",
         justifyContent: "space-around"
       }}>
-        <DroppableImage withImageDo={(i1: string) => this.setState({i1})}/>
-        <DroppableImage withImageDo={(i2: string) => this.setState({i2})}/>
-        <DroppableImage withImageDo={(i3: string) => this.setState({i3})}/>
-        <DroppableImage withImageDo={(i4: string) => this.setState({i4})}/>
-        <DroppableImage withImageDo={(i5: string) => this.setState({i5})}/>
-        <DroppableImage withImageDo={(i6: string) => this.setState({i6})}/>
-        <DroppableImage withImageDo={(i7: string) => this.setState({i7})}/>
-        <DroppableImage withImageDo={(i8: string) => this.setState({i8})}/>
-        <DroppableImage withImageDo={(i9: string) => this.setState({i9})}/>
+        {Array.from({length: this.state.len}).map((x, i) =>
+        <DroppableImage withImageDo={(img: string) => {
+          let obj: any = {};
+          obj["i" + (i + 1)] = img;
+          this.setState(obj);
+        }}/>)}
       </div>
       <h1>Preview</h1>
       <img src={this.state.currentImage} alt=""/>
     </div>
     );
+  }
+
+  private tick() {
+    this.timer = this.timer + 1;
+    //console.log(this.timer + "/" + this.state.tickMod + "/" + this.i + ":" + this.state.currentImage);
+    if (this.timer % this.state.tickMod === 0) {
+
+      let len = this.state.len;
+      let i = this.i || 0;
+      let state: any = this.state;
+      this.setState({
+        currentImage: state["i" + (i + 1)]
+      });
+      this.i = (i + 1) % len;
+      this.timer = 0;
+    }
   }
 }
 
