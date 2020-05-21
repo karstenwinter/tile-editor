@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import './App.css';
-import {MyDropzone} from "./MyDropzone";
+// @ts-ignore
+import fetch from "isomorphic-fetch"
 import {DroppableImage, pngPrefix} from "./DroppableImage";
 
 interface AppProps {
@@ -287,8 +288,8 @@ class App extends Component<AppProps, AppState> {
         let url = "https://broxp.lima-city.de/tile-editor/logs.txt";
         //let body = formData;
         fetch(url)
-        .then(r => r.text())
-        .then(text => {
+        .then((r: Response) => r.text())
+        .then((text: string) => {
           let items: SpriteItem[] = [];
           this.setState({items});
         });
